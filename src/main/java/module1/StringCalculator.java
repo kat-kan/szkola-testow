@@ -1,13 +1,6 @@
 package module1;
 
 public class StringCalculator {
-    public static void main(String[] args) {
-        System.out.println(add("10,3,4"));
-        System.out.println(add(""));
-        System.out.println(add("x,y,z"));
-        System.out.println(add("2.0, 5.0"));
-
-    }
 
     static int add(String input) {
         if (input.isEmpty()) {
