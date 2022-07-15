@@ -2,7 +2,7 @@ package module1;
 
 public class StringCalculator {
 
-    static int add(String input) {
+    public int add(String input) {
         if (input.isEmpty()) {
             return 0;
         } else {
