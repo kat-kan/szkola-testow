@@ -10,9 +10,9 @@ public class Product {
     public Product() {
     }
 
-    public Product(UUID id, BigDecimal price) {
+    public Product(UUID id, BigDecimal netPrice) {
         this.id = id;
-        this.netPrice = price;
+        this.netPrice = netPrice;
     }
 
     public UUID getId() {
