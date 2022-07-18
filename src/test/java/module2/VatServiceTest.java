@@ -22,7 +22,8 @@ class VatServiceTest {
     @DisplayName("Should return gross price for default VAT")
     void shouldReturnGrossPriceForDefaultVat() {
         //given
-        Product product = getProduct("20.0");
+        String type = "Firewood";
+        Product product = getProduct("20.0", type);
 
         //when
         BigDecimal result = vatService.getGrossPriceForDefaultVat(product);
@@ -35,7 +36,8 @@ class VatServiceTest {
     @DisplayName("Should return gross price for VAT that is other than default")
     void shouldReturnGrossPriceForVatOtherThanDefault() {
         //given
-        Product product = getProduct("10.0");
+        String type = "Fertilizer";
+        Product product = getProduct("10.0", type);
         BigDecimal vatValue = new BigDecimal("0.08");
 
         //when
@@ -49,7 +51,8 @@ class VatServiceTest {
     @DisplayName("Should return gross price equal to net price for zero VAT")
     void shouldReturnGrossPriceForZeroVat() {
         //given
-        Product product = getProduct("100.90");
+        String type = "Bread";
+        Product product = getProduct("100.90", type);
         BigDecimal vatValue = BigDecimal.ZERO;
 
         //when
@@ -63,14 +66,15 @@ class VatServiceTest {
     @DisplayName("Should throw exception when VAT is bigger than one")
     void shouldThrowExceptionForVatBiggerThanOne() {
         //given
-        Product product = getProduct("30.0");
+        String type = "Toys";
+        Product product = getProduct("30.0", type);
         BigDecimal vatValue = BigDecimal.TEN;
 
         //then
         assertThatExceptionOfType(IncorrectVatValueException.class).isThrownBy(() -> vatService.getGrossPrice(product.getNetPrice(), vatValue));
     }
 
-    private Product getProduct(String price) {
-        return new Product(UUID.randomUUID(), new BigDecimal(price));
+    private Product getProduct(String price, String type) {
+        return new Product(UUID.randomUUID(), new BigDecimal(price), type);
     }
 }
