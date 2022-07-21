@@ -4,22 +4,26 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class VatServiceTest {
     private VatService vatService;
     private VatProvider vatProvider;
+    private Logger logger;
 
     @BeforeEach
     void createVatService() {
         vatProvider = Mockito.mock(VatProvider.class);
-        vatService = new VatService(vatProvider);
+        logger = Mockito.mock(Logger.class);
+        vatService = new VatService(vatProvider, logger);
     }
 
     @Test
@@ -35,6 +39,7 @@ class VatServiceTest {
 
         //then
         assertThat(result).isEqualTo(new BigDecimal("24.60"));
+        verify(logger, times(1)).info("Calculating gross price (default VAT) for product {}", product);
     }
 
     @Test

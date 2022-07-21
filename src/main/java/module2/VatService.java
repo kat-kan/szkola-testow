@@ -1,18 +1,18 @@
 package module2;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 
 public class VatService {
-    private final Logger logger = LoggerFactory.getLogger(VatService.class);
+    private final Logger logger;
     private final VatProvider vatProvider;
 
-    public VatService(VatProvider vatProvider) {
+    public VatService(VatProvider vatProvider, Logger logger) {
         this.vatProvider = vatProvider;
+        this.logger = logger;
     }
 
     public BigDecimal getGrossPriceForDefaultVat(Product product) {
