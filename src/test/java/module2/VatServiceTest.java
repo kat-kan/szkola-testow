@@ -5,13 +5,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.Mockito.*;
 
 class VatServiceTest {
@@ -32,15 +30,20 @@ class VatServiceTest {
         //given
         String type = "Firewood";
         Product product = getProduct("20.0", type);
-        when(vatProvider.getDefaultVat()).thenReturn(new BigDecimal("0.23"));
+        BigDecimal vatValue = new BigDecimal("0.23");
+        when(vatProvider.getDefaultVat()).thenReturn(vatValue);
 
         //when
-        BigDecimal result = vatService.getGrossPriceForDefaultVat(product);
+        vatService.getGrossPriceForDefaultVat(product);
 
         //then
-        assertThat(result).isEqualTo(new BigDecimal("24.60"));
-        verify(logger, times(1)).info("Calculating gross price (default VAT) for product {}", product);
+        //assertThat(result).isEqualTo(new BigDecimal("24.60"));
+        // mod2.1 assertions removed so tests use only mocks
+        verify(vatProvider).getDefaultVat();
+        verify(logger).info("Calculating gross price (default VAT) for product {}", product);
+        verifyVatProviderDebug(vatValue);
     }
+
 
     @Test
     @DisplayName("Should return gross price for VAT that is other than default")
@@ -52,10 +55,13 @@ class VatServiceTest {
         stubGetVatForType(type, vatValue);
 
         //when
-        BigDecimal result = vatService.getGrossPriceForVatSpecificToType(product);
+        vatService.getGrossPriceForVatSpecificToType(product);
 
         //then
-        assertThat(result).isEqualTo(new BigDecimal("10.80"));
+        //assertThat(result).isEqualTo(new BigDecimal("10.80"));
+        verify(vatProvider).getVatForType(type);
+        verify(logger).info("Calculating gross price (VAT specific to type {}) for product {}", product.getType(), product);
+        verifyVatProviderDebug(vatValue);
     }
 
     @Test
@@ -68,10 +74,13 @@ class VatServiceTest {
         stubGetVatForType(type, vatValue);
 
         //when
-        BigDecimal result = vatService.getGrossPriceForVatSpecificToType(product);
+        vatService.getGrossPriceForVatSpecificToType(product);
 
         //then
-        assertThat(result).isEqualTo(new BigDecimal("100.90"));
+        //assertThat(result).isEqualTo(new BigDecimal("100.90"));
+        verify(vatProvider).getVatForType(type);
+        verify(logger).info("Calculating gross price (VAT specific to type {}) for product {}", product.getType(), product);
+        verifyVatProviderDebug(vatValue);
     }
 
     @Test
@@ -83,8 +92,14 @@ class VatServiceTest {
         BigDecimal vatValue = BigDecimal.TEN;
         stubGetVatForType(type, vatValue);
 
+        //when
+        catchThrowable(() -> vatService.getGrossPriceForVatSpecificToType(product));
+
         //then
-        assertThatExceptionOfType(IncorrectVatValueException.class).isThrownBy(() -> vatService.getGrossPriceForVatSpecificToType(product));
+        //assertThatExceptionOfType(IncorrectVatValueException.class).isThrownBy(() -> vatService.getGrossPriceForVatSpecificToType(product));
+        verify(vatProvider).getVatForType(type);
+        verify(logger, times(0)).debug("VAT value used to calculate gross price {}", vatValue);
+        verify(logger).error("Error for VAT value {}", vatValue);
     }
 
     private Product getProduct(String price, String type) {
@@ -93,5 +108,9 @@ class VatServiceTest {
 
     private void stubGetVatForType(String type, BigDecimal vatValue) {
         when(vatProvider.getVatForType(type)).thenReturn(vatValue);
+    }
+
+    private void verifyVatProviderDebug(BigDecimal vatValue) {
+        verify(logger).debug("VAT value used to calculate gross price {}", vatValue);
     }
 }

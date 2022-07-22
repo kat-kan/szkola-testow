@@ -28,7 +28,7 @@ public class VatService {
     public BigDecimal calculateGrossPrice(BigDecimal netPrice, BigDecimal vatValue) {
         if (vatValue.compareTo(BigDecimal.ONE) == 1) {
             logger.error("Error for VAT value {}", vatValue);
-            throw new IncorrectVatValueException("Podana wartość VAT jest wyższa od 1 (100% ceny produktu)");
+            throw new IncorrectVatValueException("Given VAT value is bigger than 1 (100% product price)");
         }
         logger.debug("VAT value used to calculate gross price {}", vatValue);
         return netPrice.multiply(vatValue.add(BigDecimal.ONE)).setScale(2, RoundingMode.CEILING);
