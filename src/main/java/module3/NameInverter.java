@@ -2,7 +2,7 @@ package module3;
 
 public class NameInverter {
     public String invert(String name) {
-        if (name.equals("")){
+        if ("".equals(name)){
             return "";
         }
         throw new NullPointerException();
