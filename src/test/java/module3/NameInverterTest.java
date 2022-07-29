@@ -1,5 +1,6 @@
 package module3;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,5 +54,15 @@ public class NameInverterTest {
 
         //then
         assertThat(inverted).isEqualTo("Bogusław");
+    }
+
+    @Test
+    @DisplayName("Should return inverted first and second name")
+    void shouldReturnInvertedFirstAndSecondName() {
+        //when
+        String inverted = nameInverter.invert("Jan Kowalski");
+
+        //then
+        Assertions.assertThat(inverted).isEqualTo("Kowalski, Jan");
     }
 }
