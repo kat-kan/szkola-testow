@@ -34,4 +34,14 @@ public class NameInverterTest {
         //then
         assertThat(inverted).isEqualTo(EMPTY_STRING);
     }
+
+    @Test
+    @DisplayName("Should return empty string when spaces are given")
+    void shouldReturnEmptyStringWhenSpacesGiven() {
+        //when
+        String inverted = nameInverter.invert("     ");
+
+        //then
+        assertThat(inverted).isEqualTo(EMPTY_STRING);
+    }
 }
