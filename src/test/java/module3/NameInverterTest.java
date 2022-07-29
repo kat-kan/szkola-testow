@@ -44,4 +44,14 @@ public class NameInverterTest {
         //then
         assertThat(inverted).isEqualTo(EMPTY_STRING);
     }
+
+    @Test
+    @DisplayName("Should return first name when only first name is given")
+    void shouldReturnFirstNameWhenOnlyFirstNameIsGiven() {
+        //when
+        String inverted = nameInverter.invert("Bogusław");
+
+        //then
+        assertThat(inverted).isEqualTo("Bogusław");
+    }
 }
