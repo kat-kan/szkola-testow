@@ -23,5 +23,5 @@ Module 2 is all about helpful tools - JUnit, AssertJ, Mockito, IDE shortcuts. It
 Module 3 shows concept of TDD, BDD, ATDD (focuses mostly on TDD). It mentions some practices to polish the programming skills - katas, pair programming, coding dojo.
 
 ### module 3 homework
-- Part 1 : Watch a video with TDD solution to a kata then try to solve it on your own.
+- Part 1 : Watch a video with TDD solution to a kata then try to solve it on your own. Commit after each TDD cycle. Delete your solution and try again :) 
 - Part 2 (for volunteers only) : Try to solve another kata using TDD. 
