@@ -1,16 +1,16 @@
 package module3;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class NameInverter {
+    public static List<String> honorifics = List.of("pani", "pan");
+
     public String invert(String name) {
-        if (name == null){
+        if (name == null) {
             throw new NullPointerException();
         }
-        if ("".equals(name.trim())){
+        if ("".equals(name.trim())) {
             return "";
         } else {
             return getInvertedNameElements(name);
@@ -18,15 +18,12 @@ public class NameInverter {
 
     }
 
-    private String getInvertedNameElements(String name){
+    private String getInvertedNameElements(String name) {
         String[] nameElements = name.split(" ");
-        List<String> honorifics = List.of("pani", "pan");
-        nameElements = Arrays.stream(nameElements).filter(c-> !honorifics.contains(c.toLowerCase(Locale.ROOT)))
-                .toArray(String[]::new);
-        List<String> result = new ArrayList<>();
-        for (int i = nameElements.length-1; i >= 0; i--) {
-            result.add(nameElements[i]);
-        }
+        List<String> result = Arrays.stream(nameElements).filter(c -> !honorifics.contains(c.toLowerCase(Locale.ROOT)))
+                .collect(Collectors.collectingAndThen(Collectors.toList(), c -> {Collections.reverse(c);
+                    return c;
+                }));
         return String.join(", ", result);
     }
 }

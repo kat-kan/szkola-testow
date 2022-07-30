@@ -95,4 +95,14 @@ public class NameInverterTest {
         //then
         Assertions.assertThat(inverted).isEqualTo("Nowak, Agnieszka");
     }
+
+    @Test
+    @DisplayName("Should return inverted name with titles")
+    void shouldReturnInvertedNameWithTitles() {
+        //when
+        String inverted = nameInverter.invert("pani mgr inż. Agnieszka Nowak");
+
+        //then
+        Assertions.assertThat(inverted).isEqualTo("Nowak, Agnieszka, inż., mgr");
+    }
 }
