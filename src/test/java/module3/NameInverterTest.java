@@ -75,4 +75,14 @@ public class NameInverterTest {
         //then
         Assertions.assertThat(inverted).isEqualTo("Kowalski, Jan");
     }
+
+    @Test
+    @DisplayName("Should return inverted name and ignore female honorific")
+    void shouldReturnInvertedNameAndIgnoreFemaleHonorific() {
+        //when
+        String inverted = nameInverter.invert("Pani Agnieszka Nowak");
+
+        //then
+        Assertions.assertThat(inverted).isEqualTo("Nowak, Agnieszka");
+    }
 }

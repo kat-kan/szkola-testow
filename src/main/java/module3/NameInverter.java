@@ -19,7 +19,8 @@ public class NameInverter {
 
     private String getInvertedNameElements(String name){
         String[] nameElements = name.split(" ");
-        nameElements = Arrays.stream(nameElements).filter(c-> !List.of("Pan").contains(c))
+        List<String> honorifics = List.of("Pani", "Pan");
+        nameElements = Arrays.stream(nameElements).filter(c-> !honorifics.contains(c))
                 .toArray(String[]::new);
         List<String> result = new ArrayList<>();
         for (int i = nameElements.length-1; i >= 0; i--) {
