@@ -1,6 +1,7 @@
 package module3;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class NameInverter {
@@ -11,13 +12,15 @@ public class NameInverter {
         if ("".equals(name.trim())){
             return "";
         } else {
-            return getInvertedElements(name);
+            return getInvertedNameElements(name);
         }
 
     }
 
-    private String getInvertedElements(String name){
+    private String getInvertedNameElements(String name){
         String[] nameElements = name.split(" ");
+        nameElements = Arrays.stream(nameElements).filter(c-> !List.of("Pan").contains(c))
+                .toArray(String[]::new);
         List<String> result = new ArrayList<>();
         for (int i = nameElements.length-1; i >= 0; i--) {
             result.add(nameElements[i]);
