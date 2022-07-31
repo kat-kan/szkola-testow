@@ -1,14 +1,9 @@
 package module3volunteers;
 
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+public class EmployeeReportServiceTest {
 
-import java.util.List;
 
-public class EmployeeReportTest {
-
-    public static final int ADULT_AGE = 18;
+/*    public static final int ADULT_AGE = 18;
 
     @Test
     @DisplayName("Should return list of employees who are 18 or older")
@@ -26,5 +21,5 @@ public class EmployeeReportTest {
         Assertions.assertThat(adults)
                 .isNotEmpty()
                 .allMatch(e-> (e.getAge()>= ADULT_AGE));
-    }
+    }*/
 }
