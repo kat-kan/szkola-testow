@@ -5,19 +5,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class EmployeeReportServiceTest {
     public static final int ADULT_AGE = 18;
     private EmployeeReportService employeeReportService;
-    private List<Employee> employees;
+    private EmployeeRepository employeeRepository;
 
     @BeforeEach
     void setUp() {
-        employees = List.of(new Employee("Jan Kowalski", 17), new Employee("Barbara Kowalska", 40));
-        employeeReportService = new EmployeeReportService(employees);
+        employeeRepository = new EmployeeRepository();
+        employeeReportService = new EmployeeReportService(employeeRepository);
     }
 
     @Test
@@ -47,7 +45,7 @@ public class EmployeeReportServiceTest {
     @DisplayName("Should return list of employees who are 18 or older")
     void shouldReturnListOfEmployeesWhoAre18orOlder() {
         //given
-        List<Employee> underAgeEmployees = employees.stream()
+        List<Employee> underAgeEmployees = employeeRepository.getEmployees().stream()
                 .filter(e -> e.getAge() < ADULT_AGE)
                 .toList();
 
