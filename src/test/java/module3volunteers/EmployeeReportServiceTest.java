@@ -63,11 +63,11 @@ public class EmployeeReportServiceTest {
     }
 
     @Test
-    @DisplayName("Should return list of employees sorted by name")
-    void shouldReturnListOfEmployeesSortedByName() {
+    @DisplayName("Should return list of employees sorted by name descending")
+    void shouldReturnListOfEmployeesSortedByNameDescending() {
         //given
         List<Employee> sortedAdultEmployees = employeeRepository.createEmployees().stream()
-                .sorted()
+                .sorted(Comparator.reverseOrder())
                 .peek(e -> e.setName(e.getName().toUpperCase(Locale.ROOT)))
                 .filter(e -> e.getAge() >= ADULT_AGE)
                 .toList();
@@ -84,7 +84,7 @@ public class EmployeeReportServiceTest {
     void shouldReturnCapitalizedListOfEmployees() {
         //given
         List<Employee> capitalizedEmployees = employeeRepository.createEmployees().stream()
-                .sorted()
+                .sorted(Comparator.reverseOrder())
                 .peek(e -> e.setName(e.getName().toUpperCase(Locale.ROOT)))
                 .filter(e -> e.getAge() >= ADULT_AGE)
                 .toList();

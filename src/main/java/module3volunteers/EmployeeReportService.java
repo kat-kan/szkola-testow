@@ -1,5 +1,6 @@
 package module3volunteers;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -16,7 +17,7 @@ public class EmployeeReportService {
         return employeeRepository.createEmployees().stream()
                 .filter(e -> e.getAge() >= ADULT_AGE)
                 .peek(e-> e.setName(e.getName().toUpperCase(Locale.ROOT)))
-                .sorted()
+                .sorted(Comparator.reverseOrder())
                 .toList();
     }
 }
