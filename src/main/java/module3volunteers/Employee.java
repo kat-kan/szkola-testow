@@ -1,6 +1,8 @@
 package module3volunteers;
 
-public class Employee {
+import java.util.Objects;
+
+public class Employee implements Comparable<Employee> {
     private String name;
     private int age;
 
@@ -25,4 +27,26 @@ public class Employee {
         this.age = age;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return age == employee.age && Objects.equals(name, employee.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, age);
+    }
+
+    @Override
+    public int compareTo(Employee o) {
+        return this.getName().compareTo(o.getName());
+    }
+
+    @Override
+    public String toString() {
+        return name + " " + + age;
+    }
 }

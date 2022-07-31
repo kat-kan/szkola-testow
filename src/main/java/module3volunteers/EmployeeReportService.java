@@ -14,6 +14,7 @@ public class EmployeeReportService {
     public List<Employee> getAdultEmployees() {
         return employeeRepository.getEmployees().stream()
                 .filter(e -> e.getAge() >= ADULT_AGE)
+                .sorted()
                 .toList();
     }
 }

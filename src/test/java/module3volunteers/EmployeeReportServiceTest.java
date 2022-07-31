@@ -1,11 +1,12 @@
 package module3volunteers;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class EmployeeReportServiceTest {
     public static final int ADULT_AGE = 18;
@@ -25,7 +26,7 @@ public class EmployeeReportServiceTest {
         List<Employee> adultEmployees = employeeReportService.getAdultEmployees();
 
         //then
-        Assertions.assertThat(adultEmployees)
+        assertThat(adultEmployees)
                 .isNotNull();
 
     }
@@ -37,7 +38,7 @@ public class EmployeeReportServiceTest {
         List<Employee> adultEmployees = employeeReportService.getAdultEmployees();
 
         //then
-        Assertions.assertThat(adultEmployees)
+        assertThat(adultEmployees)
                 .isNotEmpty();
     }
 
@@ -53,9 +54,26 @@ public class EmployeeReportServiceTest {
         List<Employee> adultEmployees = employeeReportService.getAdultEmployees();
 
         //then
-        Assertions.assertThat(adultEmployees)
+        assertThat(adultEmployees)
                 .isNotEmpty()
                 .allMatch(e-> (e.getAge()>= ADULT_AGE))
                 .doesNotContainAnyElementsOf(underAgeEmployees);
+    }
+
+    @Test
+    @DisplayName("Should return list of employees sorted by name")
+    void shouldReturnListOfEmployeesSortedByName() {
+        //given
+        List<Employee> sortedAdultEmployees = employeeRepository.getEmployees().stream()
+                .sorted()
+                .filter(e -> e.getAge() >= ADULT_AGE)
+                .toList();
+
+        //when
+        List<Employee> adultEmployees = employeeReportService.getAdultEmployees();
+
+        //then
+        assertThat(adultEmployees)
+                .isEqualTo(sortedAdultEmployees);
     }
 }
