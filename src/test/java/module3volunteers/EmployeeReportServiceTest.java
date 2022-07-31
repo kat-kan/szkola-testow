@@ -30,7 +30,6 @@ public class EmployeeReportServiceTest {
         //then
         assertThat(adultEmployees)
                 .isNotNull();
-
     }
 
     @Test
@@ -58,7 +57,7 @@ public class EmployeeReportServiceTest {
         //then
         assertThat(adultEmployees)
                 .isNotEmpty()
-                .allMatch(e-> (e.getAge()>= ADULT_AGE))
+                .allMatch(e -> (e.getAge() >= ADULT_AGE))
                 .doesNotContainAnyElementsOf(underAgeEmployees);
     }
 
@@ -66,17 +65,21 @@ public class EmployeeReportServiceTest {
     @DisplayName("Should return list of employees sorted by name descending")
     void shouldReturnListOfEmployeesSortedByNameDescending() {
         //given
-        List<Employee> sortedAdultEmployees = employeeRepository.createEmployees().stream()
+        List<String> sortedAdultEmployeesNames = employeeRepository.createEmployees().stream()
                 .sorted(Comparator.reverseOrder())
-                .peek(e -> e.setName(e.getName().toUpperCase(Locale.ROOT)))
                 .filter(e -> e.getAge() >= ADULT_AGE)
+                .map(Employee::getName)
                 .toList();
 
         //when
         List<Employee> adultEmployees = employeeReportService.getAdultEmployees();
 
         //then
-        assertThat(adultEmployees).isEqualTo(sortedAdultEmployees);
+        assertThat(adultEmployees)
+                .isNotEmpty();
+        for (int i = 0; i < adultEmployees.size(); i++) {
+            assertThat(adultEmployees.get(i).getName()).isEqualToIgnoringCase(sortedAdultEmployeesNames.get(i));
+        }
     }
 
     @Test
@@ -84,7 +87,6 @@ public class EmployeeReportServiceTest {
     void shouldReturnCapitalizedListOfEmployees() {
         //given
         List<Employee> capitalizedEmployees = employeeRepository.createEmployees().stream()
-                .sorted(Comparator.reverseOrder())
                 .peek(e -> e.setName(e.getName().toUpperCase(Locale.ROOT)))
                 .filter(e -> e.getAge() >= ADULT_AGE)
                 .toList();
@@ -94,6 +96,7 @@ public class EmployeeReportServiceTest {
 
 
         //then
-        assertThat(adultEmployees).isEqualTo(capitalizedEmployees);
+        assertThat(adultEmployees)
+                .containsExactlyInAnyOrderElementsOf(capitalizedEmployees);
     }
 }
