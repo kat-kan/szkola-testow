@@ -4,7 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,7 +48,7 @@ public class EmployeeReportServiceTest {
     @DisplayName("Should return list of employees who are 18 or older")
     void shouldReturnListOfEmployeesWhoAre18orOlder() {
         //given
-        List<Employee> underAgeEmployees = employeeRepository.getEmployees().stream()
+        List<Employee> underAgeEmployees = employeeRepository.createEmployees().stream()
                 .filter(e -> e.getAge() < ADULT_AGE)
                 .toList();
 
@@ -64,8 +66,9 @@ public class EmployeeReportServiceTest {
     @DisplayName("Should return list of employees sorted by name")
     void shouldReturnListOfEmployeesSortedByName() {
         //given
-        List<Employee> sortedAdultEmployees = employeeRepository.getEmployees().stream()
+        List<Employee> sortedAdultEmployees = employeeRepository.createEmployees().stream()
                 .sorted()
+                .peek(e -> e.setName(e.getName().toUpperCase(Locale.ROOT)))
                 .filter(e -> e.getAge() >= ADULT_AGE)
                 .toList();
 
@@ -73,7 +76,24 @@ public class EmployeeReportServiceTest {
         List<Employee> adultEmployees = employeeReportService.getAdultEmployees();
 
         //then
-        assertThat(adultEmployees)
-                .isEqualTo(sortedAdultEmployees);
+        assertThat(adultEmployees).isEqualTo(sortedAdultEmployees);
+    }
+
+    @Test
+    @DisplayName("Should return capitalized list of employees")
+    void shouldReturnCapitalizedListOfEmployees() {
+        //given
+        List<Employee> capitalizedEmployees = employeeRepository.createEmployees().stream()
+                .sorted()
+                .peek(e -> e.setName(e.getName().toUpperCase(Locale.ROOT)))
+                .filter(e -> e.getAge() >= ADULT_AGE)
+                .toList();
+
+        //when
+        List<Employee> adultEmployees = employeeReportService.getAdultEmployees();
+
+
+        //then
+        assertThat(adultEmployees).isEqualTo(capitalizedEmployees);
     }
 }

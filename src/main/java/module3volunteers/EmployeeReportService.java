@@ -1,6 +1,7 @@
 package module3volunteers;
 
 import java.util.List;
+import java.util.Locale;
 
 public class EmployeeReportService {
 
@@ -12,8 +13,9 @@ public class EmployeeReportService {
     }
 
     public List<Employee> getAdultEmployees() {
-        return employeeRepository.getEmployees().stream()
+        return employeeRepository.createEmployees().stream()
                 .filter(e -> e.getAge() >= ADULT_AGE)
+                .peek(e-> e.setName(e.getName().toUpperCase(Locale.ROOT)))
                 .sorted()
                 .toList();
     }
