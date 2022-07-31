@@ -7,13 +7,17 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EmployeeReportServiceTest {
+    public static final int ADULT_AGE = 18;
     private EmployeeReportService employeeReportService;
+    private List<Employee> employees;
 
     @BeforeEach
     void setUp() {
-        employeeReportService = new EmployeeReportService(List.of());
+        employees = List.of(new Employee("Jan Kowalski", 17), new Employee("Barbara Kowalska", 40));
+        employeeReportService = new EmployeeReportService(employees);
     }
 
     @Test
@@ -31,10 +35,6 @@ public class EmployeeReportServiceTest {
     @Test
     @DisplayName("Should return grocery store employees")
     void shouldReturnGroceryStoreEmployees() {
-        //given
-        List<Employee> employees = List.of(new Employee("Jan Kowalski", 17), new Employee("Barbara Kowalska", 40));
-        employeeReportService = new EmployeeReportService(employees);
-
         //when
         List<Employee> adultEmployees = employeeReportService.getAdultEmployees();
 
@@ -43,23 +43,21 @@ public class EmployeeReportServiceTest {
                 .isNotEmpty();
     }
 
-    /*    public static final int ADULT_AGE = 18;
-
     @Test
     @DisplayName("Should return list of employees who are 18 or older")
     void shouldReturnListOfEmployeesWhoAre18orOlder() {
         //given
-
-        EmployeeReport employeeReport = new EmployeeReport();
-        EmployeeRepository employeeRepository = new EmployeeRepository();
+        List<Employee> underAgeEmployees = employees.stream()
+                .filter(e -> e.getAge() < ADULT_AGE)
+                .toList();
 
         //when
-
-        List<Employee> adults = employeeReport.getAdultReport(employeeRepository);
+        List<Employee> adultEmployees = employeeReportService.getAdultEmployees();
 
         //then
-        Assertions.assertThat(adults)
+        Assertions.assertThat(adultEmployees)
                 .isNotEmpty()
-                .allMatch(e-> (e.getAge()>= ADULT_AGE));
-    }*/
+                .allMatch(e-> (e.getAge()>= ADULT_AGE))
+                .doesNotContainAnyElementsOf(underAgeEmployees);
+    }
 }

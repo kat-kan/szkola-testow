@@ -4,6 +4,7 @@ import java.util.List;
 
 public class EmployeeReportService {
 
+    public static final int ADULT_AGE = 18;
     private final List<Employee> employees;
 
     public EmployeeReportService(List<Employee> employees) {
@@ -12,6 +13,8 @@ public class EmployeeReportService {
     }
 
     public List<Employee> getAdultEmployees() {
-        return employees;
+        return employees.stream()
+                .filter(e -> e.getAge() >= ADULT_AGE)
+                .toList();
     }
 }
