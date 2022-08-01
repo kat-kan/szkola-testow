@@ -1,11 +1,27 @@
 package module1;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class StringCalculatorTest {
-    StringCalculator calculator;
+    private StringCalculator calculator;
+
+    private static Stream<Arguments> provideMultipleNumbers() {
+        return Stream.of(
+                Arguments.of("1,2,3,4,5,6,7",28),
+                Arguments.of("-3,3,0",0),
+                Arguments.of("-7,-3,-5,-5,25", 5),
+                Arguments.of("1,1,1,1,1,1,1,1,1,1", 10)
+        );
+    }
 
     @BeforeEach
     void createCalculator() {
@@ -13,31 +29,57 @@ class StringCalculatorTest {
     }
 
     @Test
+    @DisplayName("Should return zero when empty input")
     void shouldReturnZeroWhenEmptyInput() {
-        Assertions.assertEquals(0, calculator.add(""));
+        //when
+        int result = calculator.add("");
+
+        //then
+        assertThat(result).isEqualTo(0);
     }
 
     @Test
+    @DisplayName("Should return number when one number is given")
     void shouldReturnNumberWhenOneNumberIsGiven() {
-        Assertions.assertEquals(100, calculator.add("100"));
+        //when
+        int result = calculator.add("100");
+
+        //then
+        assertThat(result).isEqualTo(100);
     }
 
     @Test
+    @DisplayName("Should return sum when two numbers are given")
     void shouldReturnSumWhenTwoNumbersAreGiven() {
-        Assertions.assertEquals(20, calculator.add("14,6"));
+        //when
+        int result = calculator.add("14,6");
+
+        //then
+        assertThat(result).isEqualTo(20);
     }
 
     @Test
-    void shouldReturnSumWhenFiveNumbersAreGiven() {
-        Assertions.assertEquals(29, calculator.add("14,6,5,7,-3"));
+    @DisplayName("Should return sum that is negative number when two negative numbers are given")
+    void shouldReturnSumThatIsNegativeNumberWhenTwoNegativeNumbersAreGiven() {
+        //when
+        int result = calculator.add("-7,-3");
+
+        //then
+        assertThat(result).isEqualTo(-10);
     }
 
-    @Test
-    void shouldReturnNegativeWhenTwoNegativeNumbersAreGiven() {
-        Assertions.assertEquals(-10, calculator.add("-3,-7"));
+    @ParameterizedTest
+    @MethodSource("provideMultipleNumbers")
+    @DisplayName("Should return sum when multiple numbers are given")
+    void shouldReturnSumWhenMultipleNumbersAreGiven(String input, int expected){
+        //when
+        int result = calculator.add(input);
+
+        //then
+        assertThat(result).isEqualTo(expected);
     }
 
-    @Test
+/*    @Test
     void shouldThrowIncorrectInputExceptionWhenLettersGiven() {
         Assertions.assertThrows(IncorrectInputDataFormatException.class,
                 () -> calculator.add("x,y"));
@@ -47,6 +89,6 @@ class StringCalculatorTest {
     void shouldThrowIncorrectInputExceptionWhenDoubleGiven() {
         Assertions.assertThrows(IncorrectInputDataFormatException.class,
                 () -> calculator.add("5.0"));
-    }
+    }*/
 
 }

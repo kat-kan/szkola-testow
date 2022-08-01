@@ -2,14 +2,14 @@ package module1;
 
 public class StringCalculator {
 
-    public int add(String input) {
-        if (input.isEmpty()) {
+    public int add(String numbers) {
+        if (numbers.isEmpty()) {
             return 0;
         } else {
-            String[] numbers = input.split(",");
+            String[] splitNumbers = numbers.split(",");
             int result = 0;
             for (String number :
-                    numbers) {
+                    splitNumbers) {
                 try {
                     result += getIntFromString(number);
                 } catch (NumberFormatException exception) {
