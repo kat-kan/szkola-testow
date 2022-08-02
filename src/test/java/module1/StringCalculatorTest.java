@@ -24,6 +24,14 @@ class StringCalculatorTest {
         );
     }
 
+    private static Stream<Arguments> provideInputWithCustomDelimiters() {
+        return Stream.of(
+                Arguments.of("//;\n1;2",3),
+                Arguments.of("//|\n1|2|3",6),
+                Arguments.of("//sep\n2sep3",5)
+        );
+    }
+
     @BeforeEach
     void createCalculator() {
         calculator = new StringCalculator();
@@ -110,7 +118,18 @@ class StringCalculatorTest {
         //then
         assertThat(thrown).hasMessage("Number expected but EOF found");
     }
-    
+
+    @ParameterizedTest
+    @MethodSource("provideInputWithCustomDelimiters")
+    @DisplayName("Should return sum when numbers with custom delimiter are provided")
+    void shouldReturnSumWhenNumbersWithCustomDelimiterAreProvided(String input, int expected) {
+        //when
+        int result = calculator.add(input);
+
+        //then
+        assertThat(result).isEqualTo(expected);
+    }
+
     /*    @Test
     void shouldThrowIncorrectInputExceptionWhenLettersGiven() {
         Assertions.assertThrows(IncorrectInputDataFormatException.class,
