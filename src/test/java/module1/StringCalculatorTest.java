@@ -97,7 +97,18 @@ class StringCalculatorTest {
         Throwable thrown = catchThrowable(()-> calculator.add("1,2,3,6\n,7")) ;
 
         //then
-        assertThat(thrown).hasMessageContaining("\\n");
+        String additionalDelimiter = "\\n";
+        assertThat(thrown).hasMessageContaining(additionalDelimiter);
+    }
+
+    @Test
+    @DisplayName("Should throw exception when number is missing in the last position")
+    void shouldThrowExceptionWhenNumberIsMissingInTheLastPosition() {
+        //when
+        Throwable thrown = catchThrowable(()-> calculator.add("1,2,3,")) ;
+
+        //then
+        assertThat(thrown).hasMessage("Number expected but EOF found");
     }
     
     /*    @Test
