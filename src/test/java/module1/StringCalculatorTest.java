@@ -10,6 +10,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 class StringCalculatorTest {
     private StringCalculator calculator;
@@ -79,7 +80,27 @@ class StringCalculatorTest {
         assertThat(result).isEqualTo(expected);
     }
 
-/*    @Test
+    @Test
+    @DisplayName("Should return sum when numbers separated by newline are provided")
+    void shouldReturnSumWhenNumbersSeparatedByNewlineAreProvided() {
+        //when
+        int result = calculator.add("1\n2,3");
+
+        //then
+        assertThat(result).isEqualTo(6);
+    }
+
+    @Test
+    @DisplayName("Should throw exception when two delimiters between numbers are provided")
+    void shouldThrowExceptionWhenTwoDelimitersProvidedBetweenNumbers() {
+        //when
+        Throwable thrown = catchThrowable(()-> calculator.add("1,2,3,6\n,7")) ;
+
+        //then
+        assertThat(thrown).hasMessageContaining("\\n");
+    }
+    
+    /*    @Test
     void shouldThrowIncorrectInputExceptionWhenLettersGiven() {
         Assertions.assertThrows(IncorrectInputDataFormatException.class,
                 () -> calculator.add("x,y"));
