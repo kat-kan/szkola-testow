@@ -1,5 +1,8 @@
 package module1;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class StringCalculator {
 
     public int add(String numbers) {
@@ -31,15 +34,25 @@ public class StringCalculator {
 
     private int calculateResult(String numbers, String delimiterRegex) {
         String[] splitNumbers = numbers.split(delimiterRegex);
+        List<String> negativeNumbers = new ArrayList<>();
         int result = 0;
+        int index = -1;
         for (String number :
                 splitNumbers) {
+            index++;
             try {
-                result += getIntFromString(number);
+                int intFromString = getIntFromString(number);
+                if (intFromString<0) {
+                    negativeNumbers.add(number);
+                }
+                result += intFromString;
             } catch (NumberFormatException exception) {
                 int newlineIndex = numbers.indexOf("\n");
                 throw new IncorrectInputDataFormatException("Number expected but '\\n' found at position " + newlineIndex + ".");
             }
+        }
+        if (negativeNumbers.size()>0){
+            throw new IncorrectInputDataFormatException("Negative not allowed : " + String.join(",", negativeNumbers));
         }
         return result;
     }
