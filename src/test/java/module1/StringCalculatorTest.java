@@ -18,8 +18,8 @@ class StringCalculatorTest {
 
     private static Stream<Arguments> provideMultipleNumbers() {
         return Stream.of(
-                Arguments.of("1,2,3,4,5,6,7",28),
-                Arguments.of("3,3,0",6),
+                Arguments.of("1,2,3,4,5,6,7", 28),
+                Arguments.of("3,3,0", 6),
                 Arguments.of("7,3,5,5,25", 45),
                 Arguments.of("1,1,1,1,1,1,1,1,1,1", 10)
         );
@@ -27,9 +27,16 @@ class StringCalculatorTest {
 
     private static Stream<Arguments> provideInputWithCustomDelimiters() {
         return Stream.of(
-                Arguments.of("//;\n1;2",3),
-                Arguments.of("//|\n1|2|3",6),
-                Arguments.of("//sep\n2sep3",5)
+                Arguments.of("//;\n1;2", 3),
+                Arguments.of("//|\n1|2|3", 6),
+                Arguments.of("//sep\n2sep3", 5)
+        );
+    }
+
+    private static Stream<Arguments> provideInvalidInputs() {
+        return Stream.of(
+                Arguments.of("-1,,2", "Number expected but ',' found at position 3\nNegative not allowed : -1"),
+                Arguments.of("-1,,-2", "Number expected but ',' found at position 3\nNegative not allowed : -1,-2")
         );
     }
 
@@ -71,7 +78,7 @@ class StringCalculatorTest {
     @ParameterizedTest
     @MethodSource("provideMultipleNumbers")
     @DisplayName("Should return sum when multiple numbers are given")
-    void shouldReturnSumWhenMultipleNumbersAreGiven(String input, int expected){
+    void shouldReturnSumWhenMultipleNumbersAreGiven(String input, int expected) {
         //when
         int result = calculator.add(input);
 
@@ -93,7 +100,7 @@ class StringCalculatorTest {
     @DisplayName("Should throw exception when two delimiters between numbers are provided")
     void shouldThrowExceptionWhenTwoDelimitersProvidedBetweenNumbers() {
         //when
-        Throwable thrown = catchThrowable(()-> calculator.add("1,2,3,6\n,7")) ;
+        Throwable thrown = catchThrowable(() -> calculator.add("1,2,3,6\n,7"));
 
         //then
         String additionalDelimiter = "\\n";
@@ -104,7 +111,7 @@ class StringCalculatorTest {
     @DisplayName("Should throw exception when number is missing in the last position")
     void shouldThrowExceptionWhenNumberIsMissingInTheLastPosition() {
         //when
-        Throwable thrown = catchThrowable(()-> calculator.add("1,2,3,"));
+        Throwable thrown = catchThrowable(() -> calculator.add("1,2,3,"));
 
         //then
         assertThat(thrown).hasMessageContaining("Number expected but EOF found");
@@ -126,9 +133,20 @@ class StringCalculatorTest {
     @DisplayName("Should throw exception when negative numbers are given")
     void shouldThrowExceptionWhenNegativeNumbersAreGiven(String input) {
         //when
-        Throwable thrown = catchThrowable(()-> calculator.add(input));
+        Throwable thrown = catchThrowable(() -> calculator.add(input));
 
         //then
         assertThat(thrown).hasMessageContaining("Negative not allowed");
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideInvalidInputs")
+    @DisplayName("Should validate input for all possible errors and throw exception with all error messages")
+    void shouldValidateInputForAllPossibleErrorsAndThrowExceptionWithAllErrorMessages(String input, String expected) {
+        //when
+        Throwable thrown = catchThrowable(() -> calculator.add(input));
+
+        //then
+        assertThat(thrown).hasMessageContaining(expected);
     }
 }
