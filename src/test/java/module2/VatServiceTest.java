@@ -16,9 +16,6 @@ class VatServiceTest {
     private VatService vatService;
     private VatProvider vatProvider;
     private Logger logger;
-    private Product product;
-    private String type;
-    private BigDecimal vatValue;
 
     @BeforeEach
     void createVatService() {
@@ -31,9 +28,9 @@ class VatServiceTest {
     @DisplayName("Should return gross price for default VAT")
     void shouldReturnGrossPriceForDefaultVat() {
         //given
-        type = "Firewood";
-        product = getProduct("20.0", type);
-        vatValue = new BigDecimal("0.23");
+        String type = "Firewood";
+        Product product = getProduct("20.0", type);
+        BigDecimal vatValue = new BigDecimal("0.23");
         when(vatProvider.getDefaultVat()).thenReturn(vatValue);
 
         //when
@@ -52,9 +49,9 @@ class VatServiceTest {
     @DisplayName("Should return gross price for VAT that is other than default")
     void shouldReturnGrossPriceForVatOtherThanDefault() {
         //given
-        type = "Fertilizer";
-        product = getProduct("10.0", type);
-        vatValue = new BigDecimal("0.08");
+        String type = "Fertilizer";
+        Product product = getProduct("10.0", type);
+        BigDecimal vatValue = new BigDecimal("0.08");
         stubGetVatForType(type, vatValue);
 
         //when
@@ -71,9 +68,9 @@ class VatServiceTest {
     @DisplayName("Should return gross price equal to net price for zero VAT")
     void shouldReturnGrossPriceForZeroVat() {
         //given
-        type = "Bread";
-        product = getProduct("100.90", type);
-        vatValue = BigDecimal.ZERO;
+        String type = "Bread";
+        Product product = getProduct("100.90", type);
+        BigDecimal vatValue = BigDecimal.ZERO;
         stubGetVatForType(type, vatValue);
 
         //when
@@ -90,9 +87,9 @@ class VatServiceTest {
     @DisplayName("Should throw exception when VAT is bigger than one")
     void shouldThrowExceptionForVatBiggerThanOne() {
         //given
-        type = "Toys";
-        product = getProduct("30.0", type);
-        vatValue = BigDecimal.TEN;
+        String type = "Toys";
+        Product product = getProduct("30.0", type);
+        BigDecimal vatValue = BigDecimal.TEN;
         stubGetVatForType(type, vatValue);
 
         //when
