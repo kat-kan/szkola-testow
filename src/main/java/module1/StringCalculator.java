@@ -5,10 +5,6 @@ import java.util.List;
 
 public class StringCalculator {
 
-    private static int getIntFromString(String number) {
-        return Integer.parseInt(number);
-    }
-
     public int add(String numbers) {
         int result = 0;
         if (!numbers.isEmpty()) {
@@ -33,6 +29,10 @@ public class StringCalculator {
         return result;
     }
 
+    private static int getIntFromString(String number) {
+        return Integer.parseInt(number);
+    }
+
     private String getDelimiterRegex(String customDelimiter) {
         return customDelimiter.matches("[^a-zA-Z]") ? "[" + customDelimiter + "]" : customDelimiter;
     }
@@ -52,26 +52,7 @@ public class StringCalculator {
                     negativeNumbersIndexes.add(String.valueOf(splitNumber));
                 }
             } catch (NumberFormatException exception) {
-                int position = -1;
-                String unwantedDelimiter = "";
-                if (numbers.contains(",,")) {
-                    unwantedDelimiter = ",";
-                    position = numbers.indexOf(",,") + 1;
-                }
-                if (numbers.contains("\n,")) {
-                    unwantedDelimiter = "\\n";
-                    position = numbers.indexOf("\n,") + 1;
-                }
-                if (numbers.contains(",\n")) {
-                    unwantedDelimiter = "\\n";
-                    position = numbers.indexOf(",\n") + 1;
-                }
-                if (numbers.contains("\n\n")) {
-                    unwantedDelimiter = ",";
-                    position = numbers.indexOf("\n\n") + 1;
-                }
-                errorMessage.append("Number expected but '").append(unwantedDelimiter).append("' found at position ").append(position).append("\n");
-
+                errorMessage.append(getInvalidTwoDelimitersErrorMessage(numbers));
             }
         }
         if (negativeNumbersIndexes.size() > 0) {
@@ -91,5 +72,27 @@ public class StringCalculator {
             numbers = separatedDelimiterAndNumbers[1];
         }
         return numbers.split(delimiterRegex);
+    }
+
+    private String getInvalidTwoDelimitersErrorMessage(String numbers){
+        int position = -1;
+        String unwantedDelimiter = "";
+        if (numbers.contains(",,")) {
+            unwantedDelimiter = ",";
+            position = numbers.indexOf(",,") + 1;
+        }
+        if (numbers.contains("\n,")) {
+            unwantedDelimiter = "\\n";
+            position = numbers.indexOf("\n,") + 1;
+        }
+        if (numbers.contains(",\n")) {
+            unwantedDelimiter = "\\n";
+            position = numbers.indexOf(",\n") + 1;
+        }
+        if (numbers.contains("\n\n")) {
+            unwantedDelimiter = ",";
+            position = numbers.indexOf("\n\n") + 1;
+        }
+        return "Number expected but '" + unwantedDelimiter + "' found at position " + position + "\n";
     }
 }
