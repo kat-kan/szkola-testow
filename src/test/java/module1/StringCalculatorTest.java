@@ -100,7 +100,7 @@ class StringCalculatorTest {
     @DisplayName("Should throw exception when two delimiters between numbers are provided")
     void shouldThrowExceptionWhenTwoDelimitersProvidedBetweenNumbers() {
         //when
-        Throwable thrown = catchThrowable(() -> calculator.add("1,2,3,6\n,7"));
+        Throwable thrown = catchThrowable(() -> calculator.add("1,2,3,6,\n7"));
 
         //then
         String additionalDelimiter = "\\n";

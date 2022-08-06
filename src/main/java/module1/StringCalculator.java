@@ -1,6 +1,7 @@
 package module1;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class StringCalculator {
@@ -9,16 +10,15 @@ public class StringCalculator {
         int result = 0;
         if (!numbers.isEmpty()) {
             validateInput(numbers);
-            String[] split = splitByDelimiter(numbers);
+            List<String> split = splitByDelimiter(numbers);
             result = calculateResult(split);
         }
         return result;
     }
 
-    private int calculateResult(String[] numbers) {
+    private int calculateResult(List<String> numbers) {
         int result = 0;
-        for (String number :
-                numbers) {
+        for (String number : numbers) {
             try {
                 int intFromString = getIntFromString(number);
                 result += intFromString;
@@ -43,7 +43,7 @@ public class StringCalculator {
         if (numbers.endsWith(",")) {
             errorMessage.append("Number expected but EOF found" + "\n");
         }
-        String[] splitNumbers = splitByDelimiter(numbers);
+        List<String> splitNumbers = splitByDelimiter(numbers);
         List<String> negativeNumbersIndexes = new ArrayList<>();
         for (String splitNumber : splitNumbers) {
             try {
@@ -63,7 +63,7 @@ public class StringCalculator {
         }
     }
 
-    private String[] splitByDelimiter(String numbers) {
+    private List<String> splitByDelimiter(String numbers) {
         String delimiterRegex = "[,\n]";
         if (numbers.startsWith("//")) {
             numbers = numbers.substring(2);
@@ -71,27 +71,22 @@ public class StringCalculator {
             delimiterRegex = getDelimiterRegex(separatedDelimiterAndNumbers[0]);
             numbers = separatedDelimiterAndNumbers[1];
         }
-        return numbers.split(delimiterRegex);
+        return Arrays.asList(numbers.split(delimiterRegex));
     }
 
     private String getInvalidTwoDelimitersErrorMessage(String numbers){
-        int position = -1;
+        List<String> unwantedDelimitersCombinations = List.of(",,", "\n,",",\n", "\n\n");
         String unwantedDelimiter = "";
-        if (numbers.contains(",,")) {
-            unwantedDelimiter = ",";
-            position = numbers.indexOf(",,") + 1;
-        }
-        if (numbers.contains("\n,")) {
-            unwantedDelimiter = "\\n";
-            position = numbers.indexOf("\n,") + 1;
-        }
-        if (numbers.contains(",\n")) {
-            unwantedDelimiter = "\\n";
-            position = numbers.indexOf(",\n") + 1;
-        }
-        if (numbers.contains("\n\n")) {
-            unwantedDelimiter = ",";
-            position = numbers.indexOf("\n\n") + 1;
+        int position = -1;
+        for (String delimiter:
+             unwantedDelimitersCombinations) {
+            if (numbers.contains(delimiter)){
+                unwantedDelimiter = delimiter.substring(1);
+                if (unwantedDelimiter.equals("\n")) {
+                    unwantedDelimiter = "\\n"; //format to display properly
+                }
+                position = numbers.indexOf(delimiter)+1;
+            }
         }
         return "Number expected but '" + unwantedDelimiter + "' found at position " + position + "\n";
     }
