@@ -12,6 +12,13 @@ My motivation:
 * learn about developers' perspective to tests
 * get to know about effective ways to use unit testing tools (which are also used in test automation)
 
+## Guidelines for running tests with Maven
+To run all tests, use following command :
+`mvn clean test`
+
+To run tests from specific module use command
+
+`mvn clean '-Dtest=moduleX.*Test' test` where X = module number, for example `mvn clean '-Dtest=module1.*Test' test`
 
 ## Course topics & homeworks
 ### Module 1
